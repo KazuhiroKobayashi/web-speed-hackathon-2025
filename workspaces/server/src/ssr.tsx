@@ -20,11 +20,6 @@ function getFiles(parent: string): string[] {
     .map((dirent) => path.join(parent, dirent.name));
 }
 
-function getFilePaths(relativePath: string, rootDir: string): string[] {
-  const files = getFiles(path.resolve(rootDir, relativePath));
-  return files.map((file) => path.join('/', path.relative(rootDir, file)));
-}
-
 export function registerSsr(app: FastifyInstance): void {
   app.register(fastifyStatic, {
     prefix: '/public/',
@@ -58,8 +53,6 @@ export function registerSsr(app: FastifyInstance): void {
         </StoreProvider>
       </StrictMode>,
     );
-
-    const rootDir = path.resolve(__dirname, '../../../');
 
     reply.type('text/html').send(/* html */ `
       <!DOCTYPE html>
