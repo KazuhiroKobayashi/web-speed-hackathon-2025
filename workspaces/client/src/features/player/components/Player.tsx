@@ -3,6 +3,7 @@ import invariant from 'tiny-invariant';
 import { assignRef } from 'use-callback-ref';
 
 import { PlayerWrapper } from '@wsh-2025/client/src/features/player/interfaces/player_wrapper';
+import { createPlayer } from '@wsh-2025/client/src/features/player/logics/create_player';
 
 interface Props {
   className?: string;
@@ -13,32 +14,31 @@ interface Props {
 
 export const Player = ({ className, loop, playerRef, playlistUrl }: Props) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const playerInstanceRef = useRef<PlayerWrapper | null>(null);
 
   useEffect(() => {
     const mountElement = mountRef.current;
     invariant(mountElement);
 
-    const abortController = new AbortController();
-    let player: PlayerWrapper | null = null;
-
-    void import('@wsh-2025/client/src/features/player/logics/create_player').then(({ createPlayer }) => {
-      if (abortController.signal.aborted) {
-        return;
-      }
-      player = createPlayer();
-      player.load(playlistUrl, { loop: loop ?? false });
-      mountElement.appendChild(player.videoElement);
-      assignRef(playerRef, player);
-    });
+    playerInstanceRef.current = createPlayer();
+    playerInstanceRef.current.load(playlistUrl, { loop: loop ?? false });
+    mountElement.appendChild(playerInstanceRef.current.videoElement);
+    assignRef(playerRef, playerInstanceRef.current);
 
     return () => {
-      abortController.abort();
-      if (player != null) {
-        mountElement.removeChild(player.videoElement);
-        player.destory();
+      if (playerInstanceRef.current) {
+        mountElement.removeChild(playerInstanceRef.current.videoElement);
+        playerInstanceRef.current.destory();
+        playerInstanceRef.current = null;
       }
       assignRef(playerRef, null);
     };
+  }, []);
+
+  useEffect(() => {
+    if (playerInstanceRef.current) {
+      playerInstanceRef.current.load(playlistUrl, { loop: loop ?? false });
+    }
   }, [playlistUrl, loop]);
 
   return (
