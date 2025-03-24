@@ -96,15 +96,15 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const database = getDatabase();
 
       const channels = await database.query.channel.findMany({
-        orderBy(channel, { asc }) {
-          return asc(channel.id);
-        },
         where(channel, { inArray }) {
           if (req.query.channelIds != null) {
             const channelIds = req.query.channelIds.split(',');
             return inArray(channel.id, channelIds);
           }
           return void 0;
+        },
+        orderBy(channel, { asc }) {
+          return asc(channel.id);
         },
       });
       reply.code(200).send(channels);
