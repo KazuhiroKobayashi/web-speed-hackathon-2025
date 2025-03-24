@@ -162,9 +162,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const database = getDatabase();
 
       const episodes = await database.query.episode.findMany({
-        orderBy(episode, { asc }) {
-          return asc(episode.id);
-        },
         where(episode, { inArray }) {
           if (req.query.episodeIds != null) {
             const episodeIds = req.query.episodeIds.split(',');
@@ -172,13 +169,21 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
           }
           return void 0;
         },
+        orderBy(episode, { asc }) {
+          return asc(episode.id);
+        },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
         with: {
           series: {
+            columns: {
+              title: true,
+            },
             with: {
               episodes: {
                 orderBy(episode, { asc }) {
                   return asc(episode.order);
                 },
+                columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
               },
             },
           },
@@ -211,13 +216,18 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(episode, { eq }) {
           return eq(episode.id, req.params.episodeId);
         },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
         with: {
           series: {
+            columns: {
+              title: true,
+            },
             with: {
               episodes: {
                 orderBy(episode, { asc }) {
                   return asc(episode.order);
                 },
+                columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
               },
             },
           },
