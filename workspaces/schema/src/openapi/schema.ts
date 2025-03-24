@@ -128,8 +128,8 @@ export const getSeriesRequestQuery = z.object({
   seriesIds: z.string().optional(),
 });
 export const getSeriesResponse = z.array(
-  series.extend({
-    episodes: z.array(episode.extend({})),
+  series.pick({ id: true, title: true, description: true, thumbnailUrl: true }).extend({
+    episodes: z.array(episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })),
   }),
 );
 
@@ -137,9 +137,11 @@ export const getSeriesResponse = z.array(
 export const getSeriesByIdRequestParams = z.object({
   seriesId: z.string(),
 });
-export const getSeriesByIdResponse = series.extend({
-  episodes: z.array(episode.extend({})),
-});
+export const getSeriesByIdResponse = series
+  .pick({ id: true, title: true, description: true, thumbnailUrl: true })
+  .extend({
+    episodes: z.array(episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })),
+  });
 
 // GET /timetable
 export const getTimetableRequestQuery = z.object({

@@ -260,9 +260,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const database = getDatabase();
 
       const series = await database.query.series.findMany({
-        orderBy(series, { asc }) {
-          return asc(series.id);
-        },
         where(series, { inArray }) {
           if (req.query.seriesIds != null) {
             const seriesIds = req.query.seriesIds.split(',');
@@ -270,14 +267,16 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
           }
           return void 0;
         },
+        orderBy(series, { asc }) {
+          return asc(series.id);
+        },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true },
         with: {
           episodes: {
             orderBy(episode, { asc }) {
               return asc(episode.order);
             },
-            with: {
-              series: true,
-            },
+            columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
           },
         },
       });
@@ -308,14 +307,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(series, { eq }) {
           return eq(series.id, req.params.seriesId);
         },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true },
         with: {
           episodes: {
             orderBy(episode, { asc }) {
               return asc(episode.order);
             },
-            with: {
-              series: true,
-            },
+            columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
           },
         },
       });
