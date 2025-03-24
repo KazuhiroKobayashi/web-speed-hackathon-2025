@@ -382,9 +382,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const database = getDatabase();
 
       const programs = await database.query.program.findMany({
-        orderBy(program, { asc }) {
-          return asc(program.startAt);
-        },
         where(program, { inArray }) {
           if (req.query.programIds != null) {
             const programIds = req.query.programIds.split(',');
@@ -392,16 +389,25 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
           }
           return void 0;
         },
+        orderBy(program, { asc }) {
+          return asc(program.startAt);
+        },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, startAt: true, endAt: true },
         with: {
-          channel: true,
+          channel: {
+            columns: { id: true },
+          },
           episode: {
+            columns: { id: true },
             with: {
               series: {
+                columns: { title: true },
                 with: {
                   episodes: {
                     orderBy(episode, { asc }) {
                       return asc(episode.order);
                     },
+                    columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
                   },
                 },
               },
@@ -436,16 +442,21 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(program, { eq }) {
           return eq(program.id, req.params.programId);
         },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, startAt: true, endAt: true },
         with: {
-          channel: true,
+          channel: {
+            columns: { id: true },
+          },
           episode: {
             with: {
               series: {
+                columns: { title: true },
                 with: {
                   episodes: {
                     orderBy(episode, { asc }) {
                       return asc(episode.order);
                     },
+                    columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
                   },
                 },
               },
