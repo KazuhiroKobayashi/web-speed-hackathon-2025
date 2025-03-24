@@ -17,7 +17,6 @@
     "@standard-schema/spec": "1.0.0",
     "@wsh-2025/client": "workspace:*",
     "@wsh-2025/schema": "workspace:*",
-    "@yornaath/batshit": "0.10.1",
     "classnames": "2.5.1",
     "final-form": "4.20.10",
     "immer": "10.1.1",
