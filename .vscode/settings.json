@@ -1,3 +1,26 @@
 {
-  "typescript.preferences.importModuleSpecifier": "non-relative"
+  "files.autoSave": "afterDelay",
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.renderWhitespace": "all",
+  "editor.insertSpaces": false,
+  "files.exclude": {
+    "**/.git": false
+  },
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit",
+    "source.organizeImports.biome": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "workbench.startupEditor": "none",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "redhat.telemetry.enabled": false,
+  "amazonQ.telemetry": false,
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  }
 }
