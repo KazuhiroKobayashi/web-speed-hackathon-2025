@@ -6,8 +6,8 @@ import fastifyCookie from '@fastify/cookie';
 import fastifySession from '@fastify/session';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import * as schema from '@wsh-2025/schema/src/api/schema';
 import * as databaseSchema from '@wsh-2025/schema/src/database/schema';
-import * as schema from '@wsh-2025/schema/src/openapi/schema';
 import * as bcrypt from 'bcryptjs';
 import type { FastifyInstance } from 'fastify';
 import {

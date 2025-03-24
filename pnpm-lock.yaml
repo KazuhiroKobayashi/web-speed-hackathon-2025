@@ -272,24 +272,15 @@ importers:
 
   workspaces/schema:
     dependencies:
-      '@sinclair/typebox':
-        specifier: 0.34.30
-        version: 0.34.30
-      '@sinclair/typemap':
-        specifier: 0.8.18
-        version: 0.8.18(@sinclair/typebox@0.34.30)(valibot@1.0.0-rc.3(typescript@5.7.2))(zod@3.24.1)
       drizzle-orm:
         specifier: 0.38.2
-        version: 0.38.2(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0)
+        version: 0.38.2
       drizzle-zod:
         specifier: 0.6.0
-        version: 0.6.0(drizzle-orm@0.38.2(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0))(zod@3.24.1)
+        version: 0.6.0(drizzle-orm@0.38.2)(zod@3.24.1)
       luxon:
         specifier: 3.5.0
         version: 3.5.0
-      valibot:
-        specifier: 1.0.0-rc.3
-        version: 1.0.0-rc.3(typescript@5.7.2)
       zod:
         specifier: 3.24.1
         version: 3.24.1
@@ -1877,16 +1868,6 @@ packages:
   '@seriousme/openapi-schema-validator@2.4.0':
     resolution: {integrity: sha512-2PWq2QbDMu+CANpBLZ2Uch9PgTIiftLpiLH4lcaykjV463f4Vt9eD61EeaVI++D0HII4JKnptX46391pII1XZA==}
     hasBin: true
-
-  '@sinclair/typebox@0.34.30':
-    resolution: {integrity: sha512-gFB3BiqjDxEoadW0zn+xyMVb7cLxPCoblVn2C/BKpI41WPYi2d6fwHAlynPNZ5O/Q4WEiujdnJzVtvG/Jc2CBQ==}
-
-  '@sinclair/typemap@0.8.18':
-    resolution: {integrity: sha512-DHv4pnTjMrQFqfMXQDfH8UYcgJxh1pBRCROzhiyGs5lFssyxAXqi+k8V0oI+To+Ut+N1zjqpK90AsnJXtzsKqg==}
-    peerDependencies:
-      '@sinclair/typebox': ^0.34.24
-      valibot: ^1.0.0-rc.0
-      zod: ^3.24.1
 
   '@standard-schema/spec@1.0.0':
     resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
@@ -6588,14 +6569,6 @@ snapshots:
       js-yaml: 4.1.0
       minimist: 1.2.8
 
-  '@sinclair/typebox@0.34.30': {}
-
-  '@sinclair/typemap@0.8.18(@sinclair/typebox@0.34.30)(valibot@1.0.0-rc.3(typescript@5.7.2))(zod@3.24.1)':
-    dependencies:
-      '@sinclair/typebox': 0.34.30
-      valibot: 1.0.0-rc.3(typescript@5.7.2)
-      zod: 3.24.1
-
   '@standard-schema/spec@1.0.0': {}
 
   '@swc/helpers@0.5.15':
@@ -7525,6 +7498,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  drizzle-orm@0.38.2: {}
+
   drizzle-orm@0.38.2(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0):
     optionalDependencies:
       '@libsql/client': 0.14.0
@@ -7537,9 +7512,9 @@ snapshots:
     optionalDependencies:
       drizzle-orm: 0.38.2(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0)
 
-  drizzle-zod@0.6.0(drizzle-orm@0.38.2(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0))(zod@3.24.1):
+  drizzle-zod@0.6.0(drizzle-orm@0.38.2)(zod@3.24.1):
     dependencies:
-      drizzle-orm: 0.38.2(@libsql/client@0.14.0)(@types/react@19.0.1)(react@19.0.0)
+      drizzle-orm: 0.38.2
       zod: 3.24.1
 
   dunder-proto@1.0.1:
