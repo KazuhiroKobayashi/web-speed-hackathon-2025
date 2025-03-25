@@ -10,10 +10,11 @@ interface Props {
   className?: string;
   loop?: boolean;
   playerRef: Ref<PlayerWrapper | null>;
+  playerType: PlayerType;
   playlistUrl: string;
 }
 
-export const Player = ({ className, loop, playerRef, playlistUrl }: Props) => {
+export const Player = ({ className, loop, playerRef, playerType, playlistUrl }: Props) => {
   const mountRef = useRef<HTMLDivElement>(null);
   const playerInstanceRef = useRef<PlayerWrapper | null>(null);
 
@@ -21,7 +22,7 @@ export const Player = ({ className, loop, playerRef, playlistUrl }: Props) => {
     const mountElement = mountRef.current;
     invariant(mountElement);
 
-    playerInstanceRef.current = createPlayer(PlayerType.HlsJS);
+    playerInstanceRef.current = createPlayer(playerType);
     playerInstanceRef.current.load(playlistUrl, { loop: loop ?? false });
     mountElement.appendChild(playerInstanceRef.current.videoElement);
     assignRef(playerRef, playerInstanceRef.current);
