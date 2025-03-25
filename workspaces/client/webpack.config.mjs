@@ -1,5 +1,7 @@
 import path from 'node:path';
 
+import UnoCSS from '@unocss/webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import webpack from 'webpack';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
@@ -24,7 +26,11 @@ const config = {
           },
         },
       },
-      { test: /\.(avif|jpeg|png)$/, type: 'asset' },
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      { test: /\.(?:avif|jpeg|png)$/, type: 'asset' },
       { resourceQuery: /raw/, type: 'asset/source' },
       {
         resourceQuery: /arraybuffer/,
@@ -40,7 +46,9 @@ const config = {
     publicPath: 'auto',
   },
   plugins: [
-    new webpack.EnvironmentPlugin({ API_BASE_URL: '/api', NODE_ENV: '' }),
+    new MiniCssExtractPlugin({ filename: 'main.css' }),
+    UnoCSS(),
+    new webpack.EnvironmentPlugin({ API_BASE_URL: '/api' }),
     new BundleAnalyzerPlugin({ analyzerMode: 'static' }),
   ],
   resolve: {

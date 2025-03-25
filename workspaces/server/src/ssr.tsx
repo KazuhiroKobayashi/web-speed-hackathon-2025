@@ -24,6 +24,7 @@ export function registerSsr(app: FastifyInstance): void {
         <head>
           <meta charSet="UTF-8" />
           <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+          <link rel="stylesheet" href="/public/main.css" />
           <script src="/public/main.js"></script>
         </head>
         <body></body>
