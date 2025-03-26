@@ -156,7 +156,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         orderBy(episode, { asc }) {
           return asc(episode.id);
         },
-        columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, streamId: true, premium: true },
         with: {
           series: {
             columns: {
@@ -200,7 +200,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(episode, { eq }) {
           return eq(episode.id, req.params.episodeId);
         },
-        columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, streamId: true, premium: true },
         with: {
           series: {
             columns: {
