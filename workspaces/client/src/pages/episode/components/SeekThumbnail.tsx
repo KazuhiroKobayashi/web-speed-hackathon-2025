@@ -1,6 +1,6 @@
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
 import { useRef } from 'react';
+import { z } from 'zod';
 
 import { usePointer } from '@wsh-2025/client/src/features/layout/hooks/usePointer';
 import { useDuration } from '@wsh-2025/client/src/pages/episode/hooks/useDuration';
@@ -8,7 +8,7 @@ import { useDuration } from '@wsh-2025/client/src/pages/episode/hooks/useDuratio
 const SEEK_THUMBNAIL_WIDTH = 160;
 
 interface Props {
-  episode: StandardSchemaV1.InferOutput<typeof schema.getEpisodeByIdResponse>;
+  episode: z.infer<typeof schema.getEpisodeByIdResponse>;
 }
 
 export const SeekThumbnail = ({ episode }: Props) => {
@@ -29,7 +29,7 @@ export const SeekThumbnail = ({ episode }: Props) => {
   return (
     <div
       ref={ref}
-      className="absolute h-[90px] w-[160px] bg-[size:auto_100%] bottom-0 translate-x-[-50%]"
+      className="absolute bottom-0 h-[90px] w-[160px] translate-x-[-50%] bg-[size:auto_100%]"
       style={{
         backgroundImage: `url(/streams/${episode.streamId}/preview.jpg)`,
         backgroundPositionX: -1 * SEEK_THUMBNAIL_WIDTH * Math.floor(pointedTime),

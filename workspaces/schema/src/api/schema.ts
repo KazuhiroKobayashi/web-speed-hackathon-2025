@@ -88,21 +88,15 @@ const user = z.object({
 assertSchema(user, createSelectSchema(databaseSchema.user));
 
 // GET /channels
-export const getChannelsRequestQuery = z.object({
-  channelIds: z.string().optional(),
-});
-export const getChannelsResponse = z.array(channel.extend({}));
+export const getChannelsResponse = z.array(channel);
 
 // GET /channels/:channelId
 export const getChannelByIdRequestParams = z.object({
   channelId: z.string(),
 });
-export const getChannelByIdResponse = channel.extend({});
+export const getChannelByIdResponse = channel;
 
 // GET /episodes
-export const getEpisodesRequestQuery = z.object({
-  episodeIds: z.string().optional(),
-});
 export const getEpisodesResponse = z.array(
   episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true }).extend({
     series: series.pick({ title: true }).extend({
@@ -124,9 +118,6 @@ export const getEpisodeByIdResponse = episode
   });
 
 // GET /series
-export const getSeriesRequestQuery = z.object({
-  seriesIds: z.string().optional(),
-});
 export const getSeriesResponse = z.array(
   series.pick({ id: true, title: true, description: true, thumbnailUrl: true }).extend({
     episodes: z.array(episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })),
@@ -151,9 +142,6 @@ export const getTimetableRequestQuery = z.object({
 export const getTimetableResponse = z.array(program.extend({}));
 
 // GET /programs
-export const getProgramsRequestQuery = z.object({
-  programIds: z.string().optional(),
-});
 export const getProgramsResponse = z.array(
   program.pick({ id: true, title: true, description: true, thumbnailUrl: true, startAt: true, endAt: true }).extend({
     channel: channel.pick({ id: true }),

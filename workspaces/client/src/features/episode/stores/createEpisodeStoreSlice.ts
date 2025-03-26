@@ -1,21 +1,18 @@
 import { lens } from '@dhmk/zustand-lens';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { produce } from 'immer';
+import { z } from 'zod';
 
 import { episodeService } from '@wsh-2025/client/src/features/episode/services/episodeService';
 
 type EpisodeId = string;
 
 interface EpisodeState {
-  episodes: Record<EpisodeId, StandardSchemaV1.InferOutput<typeof schema.getEpisodeByIdResponse>>;
+  episodes: Record<EpisodeId, z.infer<typeof schema.getEpisodeByIdResponse>>;
 }
 
 interface EpisodeActions {
-  fetchEpisodeById: (params: {
-    episodeId: EpisodeId;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getEpisodeByIdResponse>>;
-  fetchEpisodes: () => Promise<StandardSchemaV1.InferOutput<typeof schema.getEpisodesResponse>>;
+  fetchEpisodeById: (params: { episodeId: EpisodeId }) => Promise<z.infer<typeof schema.getEpisodeByIdResponse>>;
+  fetchEpisodes: () => Promise<z.infer<typeof schema.getEpisodesResponse>>;
 }
 
 export const createEpisodeStoreSlice = () => {
@@ -24,20 +21,30 @@ export const createEpisodeStoreSlice = () => {
     fetchEpisodeById: async ({ episodeId }) => {
       const episode = await episodeService.fetchEpisodeById({ episodeId });
       set((state) => {
-        return produce(state, (draft) => {
-          draft.episodes[episode.id] = episode;
-        });
+        return {
+          ...state,
+          episodes: {
+            ...state.episodes,
+            [episode.id]: episode,
+          },
+        };
       });
       return episode;
     },
     fetchEpisodes: async () => {
       const episodes = await episodeService.fetchEpisodes();
       set((state) => {
-        return produce(state, (draft) => {
-          for (const episode of episodes) {
-            draft.episodes[episode.id] = episode;
-          }
-        });
+        const updatedEpisodes = episodes.reduce(
+          (acc, episode) => {
+            acc[episode.id] = episode;
+            return acc;
+          },
+          { ...state.episodes },
+        );
+        return {
+          ...state,
+          episodes: updatedEpisodes,
+        };
       });
       return episodes;
     },

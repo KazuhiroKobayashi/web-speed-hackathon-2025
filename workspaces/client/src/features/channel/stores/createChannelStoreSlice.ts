@@ -1,21 +1,18 @@
 import { lens } from '@dhmk/zustand-lens';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { produce } from 'immer';
+import { z } from 'zod';
 
 import { channelService } from '@wsh-2025/client/src/features/channel/services/channelService';
 
 type ChannelId = string;
 
 interface ChannelState {
-  channels: Record<ChannelId, StandardSchemaV1.InferOutput<typeof schema.getChannelByIdResponse>>;
+  channels: Record<ChannelId, z.infer<typeof schema.getChannelByIdResponse>>;
 }
 
 interface ChannelActions {
-  fetchChannelById: (params: {
-    channelId: ChannelId;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getChannelByIdResponse>>;
-  fetchChannels: () => Promise<StandardSchemaV1.InferOutput<typeof schema.getChannelsResponse>>;
+  fetchChannelById: (params: { channelId: ChannelId }) => Promise<z.infer<typeof schema.getChannelByIdResponse>>;
+  fetchChannels: () => Promise<z.infer<typeof schema.getChannelsResponse>>;
 }
 
 export const createChannelStoreSlice = () => {
@@ -24,20 +21,30 @@ export const createChannelStoreSlice = () => {
     fetchChannelById: async ({ channelId }) => {
       const channel = await channelService.fetchChannelById({ channelId });
       set((state) => {
-        return produce(state, (draft) => {
-          draft.channels[channel.id] = channel;
-        });
+        return {
+          ...state,
+          channels: {
+            ...state.channels,
+            [channel.id]: channel,
+          },
+        };
       });
       return channel;
     },
     fetchChannels: async () => {
       const channels = await channelService.fetchChannels();
       set((state) => {
-        return produce(state, (draft) => {
-          for (const channel of channels) {
-            draft.channels[channel.id] = channel;
-          }
-        });
+        const updatedChannels = channels.reduce(
+          (acc, channel) => {
+            acc[channel.id] = channel;
+            return acc;
+          },
+          { ...state.channels },
+        );
+        return {
+          ...state,
+          channels: updatedChannels,
+        };
       });
       return channels;
     },

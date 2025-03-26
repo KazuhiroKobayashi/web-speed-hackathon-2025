@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 import { schedulePlugin } from '@wsh-2025/client/src/features/requests/schedulePlugin';
 
@@ -10,7 +10,6 @@ const $fetch = createFetch({
   schema: createSchema({
     '/channels': {
       output: schema.getChannelsResponse,
-      query: schema.getChannelsRequestQuery,
     },
     '/channels/:channelId': {
       output: schema.getChannelByIdResponse,
@@ -21,10 +20,8 @@ const $fetch = createFetch({
 });
 
 interface ChannelService {
-  fetchChannelById: (query: {
-    channelId: string;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getChannelByIdResponse>>;
-  fetchChannels: () => Promise<StandardSchemaV1.InferOutput<typeof schema.getChannelsResponse>>;
+  fetchChannelById: (params: { channelId: string }) => Promise<z.infer<typeof schema.getChannelByIdResponse>>;
+  fetchChannels: () => Promise<z.infer<typeof schema.getChannelsResponse>>;
 }
 
 export const channelService: ChannelService = {
@@ -33,7 +30,7 @@ export const channelService: ChannelService = {
     return channel;
   },
   async fetchChannels() {
-    const data = await $fetch('/channels', { query: {} });
-    return data;
+    const channels = await $fetch('/channels');
+    return channels;
   },
 };

@@ -1,8 +1,8 @@
 import * as Slider from '@radix-ui/react-slider';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
 import { Duration } from 'luxon';
 import invariant from 'tiny-invariant';
+import { z } from 'zod';
 
 import { Hoverable } from '@wsh-2025/client/src/features/layout/components/Hoverable';
 import { SeekThumbnail } from '@wsh-2025/client/src/pages/episode/components/SeekThumbnail';
@@ -12,7 +12,7 @@ import { useMuted } from '@wsh-2025/client/src/pages/episode/hooks/useMuted';
 import { usePlaying } from '@wsh-2025/client/src/pages/episode/hooks/usePlaying';
 
 interface Props {
-  episode: StandardSchemaV1.InferOutput<typeof schema.getEpisodeByIdResponse>;
+  episode: z.infer<typeof schema.getEpisodeByIdResponse>;
 }
 
 export const PlayerController = ({ episode }: Props) => {

@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 import { schedulePlugin } from '@wsh-2025/client/src/features/requests/schedulePlugin';
 
@@ -10,6 +10,7 @@ const $fetch = createFetch({
   schema: createSchema({
     '/recommended/:referenceId': {
       output: schema.getRecommendedModulesResponse,
+      params: schema.getRecommendedModulesRequestParams,
     },
   }),
   throw: true,
@@ -18,14 +19,12 @@ const $fetch = createFetch({
 interface RecommendedService {
   fetchRecommendedModulesByReferenceId: (params: {
     referenceId: string;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getRecommendedModulesResponse>>;
+  }) => Promise<z.infer<typeof schema.getRecommendedModulesResponse>>;
 }
 
 export const recommendedService: RecommendedService = {
   async fetchRecommendedModulesByReferenceId({ referenceId }) {
-    const data = await $fetch('/recommended/:referenceId', {
-      params: { referenceId },
-    });
-    return data;
+    const modules = await $fetch('/recommended/:referenceId', { params: { referenceId } });
+    return modules;
   },
 };

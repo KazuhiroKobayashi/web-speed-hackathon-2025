@@ -1,10 +1,9 @@
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { ArrayValues } from 'type-fest';
+import { z } from 'zod';
 
 import { useStore } from '@wsh-2025/client/src/app/StoreContext';
 
-type Program = ArrayValues<StandardSchemaV1.InferOutput<typeof schema.getTimetableResponse>>;
+type Program = z.infer<typeof schema.getTimetableResponse>[number];
 
 export function useSelectedProgramId() {
   const state = useStore((s) => s);

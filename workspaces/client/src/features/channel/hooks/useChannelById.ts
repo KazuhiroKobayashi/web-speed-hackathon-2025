@@ -1,11 +1,13 @@
 import { useStore } from '@wsh-2025/client/src/app/StoreContext';
 
-type ChannelId = string;
+interface Params {
+  channelId: string;
+}
 
-export function useChannelById(params: { channelId: ChannelId }) {
+export function useChannelById({ channelId }: Params) {
   const state = useStore((s) => s);
 
-  const channel = state.features.channel.channels[params.channelId];
+  const channel = state.features.channel.channels[channelId];
 
   return channel;
 }

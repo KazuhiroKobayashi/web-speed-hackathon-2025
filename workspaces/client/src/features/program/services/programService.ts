@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 import { schedulePlugin } from '@wsh-2025/client/src/features/requests/schedulePlugin';
 
@@ -10,7 +10,6 @@ const $fetch = createFetch({
   schema: createSchema({
     '/programs': {
       output: schema.getProgramsResponse,
-      query: schema.getProgramsRequestQuery,
     },
     '/programs/:programId': {
       output: schema.getProgramByIdResponse,
@@ -21,10 +20,8 @@ const $fetch = createFetch({
 });
 
 interface ProgramService {
-  fetchProgramById: (query: {
-    programId: string;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getProgramByIdResponse>>;
-  fetchPrograms: () => Promise<StandardSchemaV1.InferOutput<typeof schema.getProgramsResponse>>;
+  fetchProgramById: (params: { programId: string }) => Promise<z.infer<typeof schema.getProgramByIdResponse>>;
+  fetchPrograms: () => Promise<z.infer<typeof schema.getProgramsResponse>>;
 }
 
 export const programService: ProgramService = {
@@ -33,7 +30,7 @@ export const programService: ProgramService = {
     return program;
   },
   async fetchPrograms() {
-    const data = await $fetch('/programs', { query: {} });
-    return data;
+    const programs = await $fetch('/programs');
+    return programs;
   },
 };
