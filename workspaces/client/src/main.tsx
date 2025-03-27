@@ -1,4 +1,5 @@
 import '@unocss/reset/tailwind-compat.css';
+import './main.css';
 // eslint-disable-next-line import/no-unresolved
 import 'uno.css';
 
@@ -23,7 +24,7 @@ function main() {
   const router = createBrowserRouter(createRoutes(store), {});
 
   hydrateRoot(
-    document,
+    document.body,
     <StrictMode>
       <StoreProvider createStore={() => store}>
         <RouterProvider router={router} />
