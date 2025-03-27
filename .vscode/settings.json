@@ -1,3 +1,22 @@
 {
-  "typescript.preferences.importModuleSpecifier": "non-relative"
+  "[markdown]": {
+    "editor.defaultFormatter": "DavidAnson.vscode-markdownlint"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": false,
+  "editor.renderWhitespace": "all",
+  "editor.tabSize": 2,
+  "files.autoSave": "afterDelay",
+  "files.exclude": {
+    "**/.git": false
+  },
+  "redhat.telemetry.enabled": false,
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "workbench.startupEditor": "none"
 }

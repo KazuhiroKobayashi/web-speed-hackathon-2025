@@ -1,0 +1,49 @@
+{
+	"name": "Web Speed Hackathon 2025",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": { "IMAGE_VERSION": "bookworm" }
+	},
+	"runArgs": ["--name", "web-speed-hackathon-2025"],
+	"features": {
+		"ghcr.io/devcontainers/features/aws-cli:1": { "version": "latest" },
+		"ghcr.io/devcontainers/features/git:1": { "version": "latest" },
+		"ghcr.io/devcontainers/features/node:1": { "version": "22" }
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"gruntfuggly.todo-tree",
+				"tyriar.sort-lines",
+				"mhutchie.git-graph",
+				"ms-vscode.live-server",
+				"bierner.markdown-preview-github-styles",
+				"davidanson.vscode-markdownlint",
+				"streetsidesoftware.code-spell-checker",
+				"usernamehw.errorlens",
+				"esbenp.prettier-vscode",
+				"redhat.vscode-yaml",
+				"visualstudioexptteam.vscodeintellicode",
+				"ms-vscode.vscode-typescript-next",
+				"yoavbls.pretty-ts-errors",
+				"burkeholland.simple-react-snippets",
+				"bradlc.vscode-tailwindcss",
+				"dbaeumer.vscode-eslint",
+				"ms-playwright.playwright"
+			]
+		}
+	},
+	"mounts": [
+		{ "target": "${containerWorkspaceFolder}/.pnpm-store", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/node_modules", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/workspaces/client/node_modules", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/workspaces/configs/node_modules", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/workspaces/schema/node_modules", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/workspaces/server/node_modules", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/workspaces/test/node_modules", "type": "volume" },
+		{ "target": "${containerWorkspaceFolder}/tmp", "type": "volume" }
+	],
+	"postCreateCommand": ".devcontainer/post-create.sh",
+	"postStartCommand": ".devcontainer/post-start.sh",
+	"remoteUser": "root"
+}
