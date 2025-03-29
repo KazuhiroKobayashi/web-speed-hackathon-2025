@@ -6,6 +6,9 @@ import type { FastifyInstance } from 'fastify';
 
 export function registerSsr(app: FastifyInstance): void {
   app.register(fastifyStatic, {
+    cacheControl: true,
+    immutable: true,
+    maxAge: '30d',
     prefix: '/public/',
     root: [
       path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../client/dist'),
