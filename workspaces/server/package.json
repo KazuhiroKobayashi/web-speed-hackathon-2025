@@ -2,6 +2,7 @@
   "name": "@wsh-2025/server",
   "private": true,
   "scripts": {
+    "convert:images": "wireit",
     "database:migrate": "wireit",
     "database:reset": "wireit",
     "format": "wireit",
@@ -51,9 +52,13 @@
     "iconv-lite": "0.6.3",
     "jszip": "3.10.1",
     "mikanjs": "1.0.14",
+    "sharp": "0.33.5",
     "type-fest": "4.29.1"
   },
   "wireit": {
+    "convert:images": {
+      "command": "tsx ./tools/convert-images.ts"
+    },
     "database:migrate": {
       "command": "drizzle-kit generate && drizzle-kit push"
     },
