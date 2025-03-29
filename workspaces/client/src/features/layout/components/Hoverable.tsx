@@ -1,4 +1,3 @@
-import classNames from 'classnames';
 import { Children, cloneElement, ReactElement, Ref, useRef } from 'react';
 import { useMergeRefs } from 'use-callback-ref';
 
@@ -29,11 +28,7 @@ export const Hoverable = (props: Props) => {
     pointer.y <= elementRect.bottom;
 
   return cloneElement(child, {
-    className: classNames(
-      child.props.className,
-      'cursor-pointer',
-      hovered ? props.classNames.hovered : props.classNames.default,
-    ),
+    className: `${child.props.className} cursor-pointer ${hovered ? props.classNames.hovered : props.classNames.default}`,
     ref: mergedRef,
   });
 };
