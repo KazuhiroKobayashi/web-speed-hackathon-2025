@@ -128,12 +128,14 @@ async function main() {
     console.log('Creating series...');
     const seriesList: (typeof schema.series.$inferSelect)[] = [];
     {
-      const data: (typeof schema.series.$inferInsert)[] = Array.from({ length: 30 }, () => ({
-        description: faker.lorem.paragraph({ max: 200, min: 100 }).replace(/\s/g, '').replace(/\./g, '。'),
-        id: faker.string.uuid(),
-        thumbnailUrl: `${faker.helpers.arrayElement(imagePaths)}?version=${faker.string.nanoid()}`,
-        title: faker.helpers.arrayElement(seriesTitleList),
-      }));
+      const data: (typeof schema.series.$inferInsert)[] = Array.from({ length: 30 }, () => {
+        const description = faker.lorem.paragraph({ max: 200, min: 100 }).replace(/\s/g, '').replace(/\./g, '。');
+        const id = faker.string.uuid();
+        const thumbnailUrl = `${faker.helpers.arrayElement(imagePaths)}`;
+        faker.string.nanoid();
+        const title = faker.helpers.arrayElement(seriesTitleList);
+        return { description, id, thumbnailUrl, title };
+      });
       const result = await database.insert(schema.series).values(data).returning();
       seriesList.push(...result);
     }
@@ -144,16 +146,17 @@ async function main() {
     for (const series of seriesList) {
       const data: (typeof schema.episode.$inferInsert)[] = Array.from(
         { length: faker.number.int({ max: 20, min: 10 }) },
-        (_, idx) => ({
-          description: faker.lorem.paragraph({ max: 200, min: 100 }).replace(/\s/g, '').replace(/\./g, '。'),
-          id: faker.string.uuid(),
-          order: idx + 1,
-          seriesId: series.id,
-          streamId: faker.helpers.arrayElement(streamList).id,
-          thumbnailUrl: `${faker.helpers.arrayElement(imagePaths)}?version=${faker.string.nanoid()}`,
-          title: `第${String(idx + 1)}話 ${faker.helpers.arrayElement(episodeTitleList)}`,
-          premium: idx % 5 === 0,
-        }),
+        (_, idx) => {
+          const description = faker.lorem.paragraph({ max: 200, min: 100 }).replace(/\s/g, '').replace(/\./g, '。');
+          const id = faker.string.uuid();
+          const order = idx + 1;
+          const streamId = faker.helpers.arrayElement(streamList).id;
+          const thumbnailUrl = `${faker.helpers.arrayElement(imagePaths)}`;
+          faker.string.nanoid();
+          const title = `第${String(idx + 1)}話 ${faker.helpers.arrayElement(episodeTitleList)}`;
+          const premium = idx % 5 === 0;
+          return { description, id, order, premium, seriesId: series.id, streamId, thumbnailUrl, title };
+        },
       );
       const result = await database.insert(schema.episode).values(data).returning();
       episodeList.push(...result);
@@ -183,9 +186,10 @@ async function main() {
           episodeId: episode.id,
           id: faker.string.uuid(),
           startAt: new Date(startAt).toISOString(),
-          thumbnailUrl: `${faker.helpers.arrayElement(imagePaths)}?version=${faker.string.nanoid()}`,
+          thumbnailUrl: `${faker.helpers.arrayElement(imagePaths)}`,
           title: `${series?.title ?? ''} ${episode.title}`,
         };
+        faker.string.nanoid();
         programList.push(program);
 
         remainingMinutes -= duration;
