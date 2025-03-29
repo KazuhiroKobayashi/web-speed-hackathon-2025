@@ -179,20 +179,13 @@ export const getRecommendedModulesRequestParams = z.object({
   referenceId: z.string(),
 });
 export const getRecommendedModulesResponse = z.array(
-  recommendedModule.extend({
+  recommendedModule.pick({ id: true, type: true, title: true }).extend({
     items: z.array(
-      recommendedItem.extend({
-        series: series
-          .extend({
-            episodes: z.array(episode.extend({})),
-          })
-          .nullable(),
+      recommendedItem.pick({ id: true }).extend({
+        series: series.pick({ id: true, title: true, thumbnailUrl: true }).nullable(),
         episode: episode
-          .extend({
-            series: series.extend({
-              episodes: z.array(episode.extend({})),
-            }),
-          })
+          .pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })
+          .extend({ series: series.pick({ title: true }) })
           .nullable(),
       }),
     ),

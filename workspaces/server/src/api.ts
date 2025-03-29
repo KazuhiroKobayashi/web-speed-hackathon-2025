@@ -470,37 +470,28 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const database = getDatabase();
 
       const modules = await database.query.recommendedModule.findMany({
-        orderBy(module, { asc }) {
-          return asc(module.order);
-        },
         where(module, { eq }) {
           return eq(module.referenceId, req.params.referenceId);
         },
+        orderBy(module, { asc }) {
+          return asc(module.order);
+        },
+        columns: { id: true, type: true, title: true },
         with: {
           items: {
             orderBy(item, { asc }) {
               return asc(item.order);
             },
+            columns: { id: true },
             with: {
               series: {
-                with: {
-                  episodes: {
-                    orderBy(episode, { asc }) {
-                      return asc(episode.order);
-                    },
-                  },
-                },
+                columns: { id: true, title: true, thumbnailUrl: true },
               },
               episode: {
+                columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
                 with: {
                   series: {
-                    with: {
-                      episodes: {
-                        orderBy(episode, { asc }) {
-                          return asc(episode.order);
-                        },
-                      },
-                    },
+                    columns: { title: true },
                   },
                 },
               },
