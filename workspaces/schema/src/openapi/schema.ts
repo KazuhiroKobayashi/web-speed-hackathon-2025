@@ -88,19 +88,19 @@ const user = z.object({
 assertSchema(user, createSelectSchema(databaseSchema.user));
 
 // GET /channels
-export const getChannelsResponse = z.array(channel.extend({}));
+export const getChannelsResponse = z.array(channel);
 
 // GET /channels/:channelId
 export const getChannelByIdRequestParams = z.object({
   channelId: z.string(),
 });
-export const getChannelByIdResponse = channel.extend({});
+export const getChannelByIdResponse = channel;
 
 // GET /episodes
 export const getEpisodesResponse = z.array(
   episode.extend({
     series: series.extend({
-      episodes: z.array(episode.extend({})),
+      episodes: z.array(episode),
     }),
   }),
 );
@@ -109,16 +109,18 @@ export const getEpisodesResponse = z.array(
 export const getEpisodeByIdRequestParams = z.object({
   episodeId: z.string(),
 });
-export const getEpisodeByIdResponse = episode.extend({
-  series: series.extend({
-    episodes: z.array(episode.extend({})),
-  }),
-});
+export const getEpisodeByIdResponse = episode
+  .pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })
+  .extend({
+    series: series.pick({ title: true }).extend({
+      episodes: z.array(episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })),
+    }),
+  });
 
 // GET /series
 export const getSeriesResponse = z.array(
   series.extend({
-    episodes: z.array(episode.extend({})),
+    episodes: z.array(episode),
   }),
 );
 
@@ -126,24 +128,26 @@ export const getSeriesResponse = z.array(
 export const getSeriesByIdRequestParams = z.object({
   seriesId: z.string(),
 });
-export const getSeriesByIdResponse = series.extend({
-  episodes: z.array(episode.extend({})),
-});
+export const getSeriesByIdResponse = series
+  .pick({ id: true, title: true, description: true, thumbnailUrl: true })
+  .extend({
+    episodes: z.array(episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })),
+  });
 
 // GET /timetable
 export const getTimetableRequestQuery = z.object({
   since: z.coerce.string().openapi({ format: 'date-time' }),
   until: z.coerce.string().openapi({ format: 'date-time' }),
 });
-export const getTimetableResponse = z.array(program.extend({}));
+export const getTimetableResponse = z.array(program);
 
 // GET /programs
 export const getProgramsResponse = z.array(
   program.extend({
-    channel: channel.extend({}),
+    channel: channel,
     episode: episode.extend({
       series: series.extend({
-        episodes: z.array(episode.extend({})),
+        episodes: z.array(episode),
       }),
     }),
   }),
@@ -153,14 +157,18 @@ export const getProgramsResponse = z.array(
 export const getProgramByIdRequestParams = z.object({
   programId: z.string(),
 });
-export const getProgramByIdResponse = program.extend({
-  channel: channel.extend({}),
-  episode: episode.extend({
-    series: series.extend({
-      episodes: z.array(episode.extend({})),
+export const getProgramByIdResponse = program
+  .pick({ id: true, title: true, description: true, thumbnailUrl: true, startAt: true, endAt: true })
+  .extend({
+    channel: channel.pick({ id: true }),
+    episode: episode.pick({ id: true }).extend({
+      series: series.pick({ title: true }).extend({
+        episodes: z.array(
+          episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true }),
+        ),
+      }),
     }),
-  }),
-});
+  });
 
 // GET /recommended/:referenceId
 export const getRecommendedModulesRequestParams = z.object({

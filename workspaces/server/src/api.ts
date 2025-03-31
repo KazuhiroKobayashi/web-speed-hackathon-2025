@@ -195,13 +195,16 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(episode, { eq }) {
           return eq(episode.id, req.params.episodeId);
         },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
         with: {
           series: {
+            columns: { title: true },
             with: {
               episodes: {
                 orderBy(episode, { asc }) {
                   return asc(episode.order);
                 },
+                columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
               },
             },
           },
@@ -274,14 +277,13 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(series, { eq }) {
           return eq(series.id, req.params.seriesId);
         },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true },
         with: {
           episodes: {
             orderBy(episode, { asc }) {
               return asc(episode.order);
             },
-            with: {
-              series: true,
-            },
+            columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
           },
         },
       });
@@ -312,9 +314,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
       const database = getDatabase();
 
       const programs = await database.query.program.findMany({
-        orderBy(program, { asc }) {
-          return asc(program.startAt);
-        },
         where(program, { between, sql }) {
           // 競技のため、時刻のみで比較する
           return between(
@@ -322,6 +321,9 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
             sql`time(${req.query.since}, '+9 hours')`,
             sql`time(${req.query.until}, '+9 hours')`,
           );
+        },
+        orderBy(program, { asc }) {
+          return asc(program.startAt);
         },
       });
       reply.code(200).send(programs);
@@ -394,16 +396,22 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(program, { eq }) {
           return eq(program.id, req.params.programId);
         },
+        columns: { id: true, title: true, description: true, thumbnailUrl: true, startAt: true, endAt: true },
         with: {
-          channel: true,
+          channel: {
+            columns: { id: true },
+          },
           episode: {
+            columns: { id: true },
             with: {
               series: {
+                columns: { title: true },
                 with: {
                   episodes: {
                     orderBy(episode, { asc }) {
                       return asc(episode.order);
                     },
+                    columns: { id: true, title: true, description: true, thumbnailUrl: true, premium: true },
                   },
                 },
               },
