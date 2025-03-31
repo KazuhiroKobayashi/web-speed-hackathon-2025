@@ -81,7 +81,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     url: '/channels',
     schema: {
       tags: ['チャンネル'],
-      querystring: schema.getChannelsRequestQuery,
       response: {
         200: {
           content: {
@@ -92,19 +91,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         },
       },
     } satisfies FastifyZodOpenApiSchema,
-    handler: async function getChannels(req, reply) {
+    handler: async function getChannels(_, reply) {
       const database = getDatabase();
 
       const channels = await database.query.channel.findMany({
         orderBy(channel, { asc }) {
           return asc(channel.id);
-        },
-        where(channel, { inArray }) {
-          if (req.query.channelIds != null) {
-            const channelIds = req.query.channelIds.split(',');
-            return inArray(channel.id, channelIds);
-          }
-          return void 0;
         },
       });
       reply.code(200).send(channels);
@@ -147,7 +139,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     url: '/episodes',
     schema: {
       tags: ['エピソード'],
-      querystring: schema.getEpisodesRequestQuery,
       response: {
         200: {
           content: {
@@ -158,19 +149,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         },
       },
     } satisfies FastifyZodOpenApiSchema,
-    handler: async function getEpisodes(req, reply) {
+    handler: async function getEpisodes(_, reply) {
       const database = getDatabase();
 
       const episodes = await database.query.episode.findMany({
         orderBy(episode, { asc }) {
           return asc(episode.id);
-        },
-        where(episode, { inArray }) {
-          if (req.query.episodeIds != null) {
-            const episodeIds = req.query.episodeIds.split(',');
-            return inArray(episode.id, episodeIds);
-          }
-          return void 0;
         },
         with: {
           series: {
@@ -235,7 +219,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     url: '/series',
     schema: {
       tags: ['シリーズ'],
-      querystring: schema.getSeriesRequestQuery,
       response: {
         200: {
           content: {
@@ -246,19 +229,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         },
       },
     } satisfies FastifyZodOpenApiSchema,
-    handler: async function getSeries(req, reply) {
+    handler: async function getSeries(_, reply) {
       const database = getDatabase();
 
       const series = await database.query.series.findMany({
         orderBy(series, { asc }) {
           return asc(series.id);
-        },
-        where(series, { inArray }) {
-          if (req.query.seriesIds != null) {
-            const seriesIds = req.query.seriesIds.split(',');
-            return inArray(series.id, seriesIds);
-          }
-          return void 0;
         },
         with: {
           episodes: {
@@ -357,7 +333,6 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     url: '/programs',
     schema: {
       tags: ['番組'],
-      querystring: schema.getProgramsRequestQuery,
       response: {
         200: {
           content: {
@@ -368,19 +343,12 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         },
       },
     } satisfies FastifyZodOpenApiSchema,
-    handler: async function getPrograms(req, reply) {
+    handler: async function getPrograms(_, reply) {
       const database = getDatabase();
 
       const programs = await database.query.program.findMany({
         orderBy(program, { asc }) {
           return asc(program.startAt);
-        },
-        where(program, { inArray }) {
-          if (req.query.programIds != null) {
-            const programIds = req.query.programIds.split(',');
-            return inArray(program.id, programIds);
-          }
-          return void 0;
         },
         with: {
           channel: true,

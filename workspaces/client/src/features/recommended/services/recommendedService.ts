@@ -10,6 +10,7 @@ const $fetch = createFetch({
   schema: createSchema({
     '/recommended/:referenceId': {
       output: schema.getRecommendedModulesResponse,
+      params: schema.getRecommendedModulesRequestParams,
     },
   }),
   throw: true,
@@ -23,9 +24,9 @@ interface RecommendedService {
 
 export const recommendedService: RecommendedService = {
   async fetchRecommendedModulesByReferenceId({ referenceId }) {
-    const data = await $fetch('/recommended/:referenceId', {
+    const recommendedModules = await $fetch('/recommended/:referenceId', {
       params: { referenceId },
     });
-    return data;
+    return recommendedModules;
   },
 };

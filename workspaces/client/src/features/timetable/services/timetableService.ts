@@ -24,9 +24,9 @@ interface TimetableService {
 
 export const timetableService: TimetableService = {
   async fetchTimetable({ since, until }) {
-    const data = await $fetch('/timetable', {
+    const timetable = await $fetch('/timetable', {
       query: { since, until },
     });
-    return data;
+    return timetable;
   },
 };

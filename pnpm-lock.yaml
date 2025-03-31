@@ -57,9 +57,6 @@ importers:
       '@wsh-2025/schema':
         specifier: workspace:*
         version: link:../schema
-      '@yornaath/batshit':
-        specifier: 0.10.1
-        version: 0.10.1
       final-form:
         specifier: 4.20.10
         version: 4.20.10
@@ -2380,12 +2377,6 @@ packages:
 
   '@xtuc/long@4.2.2':
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
-
-  '@yornaath/batshit-devtools@1.7.1':
-    resolution: {integrity: sha512-AyttV1Njj5ug+XqEWY1smV45dTWMlWKtj1B8jcFYgBKUFyUlF/qEhD+iP1E5UaRYW6hQRYD9T2WNDwFTrOMWzQ==}
-
-  '@yornaath/batshit@0.10.1':
-    resolution: {integrity: sha512-WGZ1WNoiVN6CLf28O73+6SCf+2lUn4U7TLGM9f4zOad0pn9mdoXIq8cwu3Kpf7N2OTYgWGK4eQPTflwFlduDGA==}
 
   abstract-logging@2.0.1:
     resolution: {integrity: sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==}
@@ -7566,12 +7557,6 @@ snapshots:
   '@xtuc/ieee754@1.2.0': {}
 
   '@xtuc/long@4.2.2': {}
-
-  '@yornaath/batshit-devtools@1.7.1': {}
-
-  '@yornaath/batshit@0.10.1':
-    dependencies:
-      '@yornaath/batshit-devtools': 1.7.1
 
   abstract-logging@2.0.1: {}
 

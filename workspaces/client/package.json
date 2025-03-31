@@ -18,7 +18,6 @@
     "@types/webpack-bundle-analyzer": "4.7.0",
     "@wsh-2025/client": "workspace:*",
     "@wsh-2025/schema": "workspace:*",
-    "@yornaath/batshit": "0.10.1",
     "final-form": "4.20.10",
     "immer": "10.1.1",
     "lodash": "4.17.21",

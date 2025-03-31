@@ -88,9 +88,6 @@ const user = z.object({
 assertSchema(user, createSelectSchema(databaseSchema.user));
 
 // GET /channels
-export const getChannelsRequestQuery = z.object({
-  channelIds: z.string().optional(),
-});
 export const getChannelsResponse = z.array(channel.extend({}));
 
 // GET /channels/:channelId
@@ -100,9 +97,6 @@ export const getChannelByIdRequestParams = z.object({
 export const getChannelByIdResponse = channel.extend({});
 
 // GET /episodes
-export const getEpisodesRequestQuery = z.object({
-  episodeIds: z.string().optional(),
-});
 export const getEpisodesResponse = z.array(
   episode.extend({
     series: series.extend({
@@ -122,9 +116,6 @@ export const getEpisodeByIdResponse = episode.extend({
 });
 
 // GET /series
-export const getSeriesRequestQuery = z.object({
-  seriesIds: z.string().optional(),
-});
 export const getSeriesResponse = z.array(
   series.extend({
     episodes: z.array(episode.extend({})),
@@ -147,9 +138,6 @@ export const getTimetableRequestQuery = z.object({
 export const getTimetableResponse = z.array(program.extend({}));
 
 // GET /programs
-export const getProgramsRequestQuery = z.object({
-  programIds: z.string().optional(),
-});
 export const getProgramsResponse = z.array(
   program.extend({
     channel: channel.extend({}),
