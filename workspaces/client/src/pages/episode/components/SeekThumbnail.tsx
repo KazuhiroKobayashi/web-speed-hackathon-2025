@@ -1,8 +1,7 @@
 import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import { usePointer } from '@wsh-2025/client/src/features/layout/hooks/usePointer';
 import { useDuration } from '@wsh-2025/client/src/pages/episode/hooks/useDuration';
 
 const SEEK_THUMBNAIL_WIDTH = 160;
@@ -13,11 +12,11 @@ interface Props {
 
 export const SeekThumbnail = ({ episode }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
-  const pointer = usePointer();
+  const [pointerX, setPointerX] = useState(0);
   const duration = useDuration();
 
   const elementRect = ref.current?.parentElement?.getBoundingClientRect() ?? { left: 0, width: 0 };
-  const relativeX = pointer.x - elementRect.left;
+  const relativeX = pointerX - elementRect.left;
 
   const percentage = Math.max(0, Math.min(relativeX / elementRect.width, 1));
   const pointedTime = duration * percentage;
@@ -26,10 +25,22 @@ export const SeekThumbnail = ({ episode }: Props) => {
   const MIN_LEFT = SEEK_THUMBNAIL_WIDTH / 2;
   const MAX_LEFT = elementRect.width - SEEK_THUMBNAIL_WIDTH / 2;
 
+  const handlePointerMove = (e: PointerEvent) => {
+    setPointerX(e.clientX);
+  };
+
+  useEffect(() => {
+    if (!ref.current) return;
+    window.addEventListener('pointermove', handlePointerMove);
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+    };
+  }, [ref, pointerX]);
+
   return (
     <div
       ref={ref}
-      className="absolute h-[90px] w-[160px] bg-[size:auto_100%] bottom-0 translate-x-[-50%]"
+      className="absolute bottom-0 h-[90px] w-[160px] translate-x-[-50%] bg-[size:auto_100%]"
       style={{
         backgroundImage: `url(/streams/${episode.streamId}/thumbnail.jpg)`,
         backgroundPositionX: -1 * SEEK_THUMBNAIL_WIDTH * Math.floor(pointedTime),
