@@ -4,7 +4,6 @@ import { DateTime } from 'luxon';
 import { ReactElement, useEffect, useRef, useState } from 'react';
 import { ArrayValues } from 'type-fest';
 
-import { Hoverable } from '@wsh-2025/client/src/features/layout/components/Hoverable';
 import { ProgramDetailDialog } from '@wsh-2025/client/src/pages/timetable/components/ProgramDetailDialog';
 import { useColumnWidth } from '@wsh-2025/client/src/pages/timetable/hooks/useColumnWidth';
 import { useCurrentUnixtimeMs } from '@wsh-2025/client/src/pages/timetable/hooks/useCurrentUnixtimeMs';
@@ -47,37 +46,35 @@ export const Program = ({ height, program }: Props): ReactElement => {
 
   return (
     <>
-      <Hoverable classNames={{ hovered: isArchived ? 'brightness-200' : 'brightness-125' }}>
-        <button
-          className={`w-auto border-[1px] border-solid border-[#000000] ${isBroadcasting ? 'bg-[#FCF6E5]' : 'bg-[#212121]'} px-[12px] py-[8px] text-left ${isArchived ? 'opacity-50' : 'opacity-100'}`}
-          style={{ height: `${height}px`, width: `${width}px` }}
-          type="button"
-          onClick={onClick}
-        >
-          <div className="flex size-full flex-col overflow-hidden">
-            <div ref={titleRef} className="mb-[8px] flex flex-row items-start justify-start">
-              <span
-                className={`mr-[8px] shrink-0 grow-0 text-[14px] font-bold ${isBroadcasting ? 'text-[#767676]' : 'text-[#999999]'}`}
-              >
-                {DateTime.fromISO(program.startAt).toFormat('mm')}
-              </span>
-              <div
-                className={`grow-1 shrink-1 line-clamp-3 overflow-hidden text-ellipsis text-[14px] font-bold ${isBroadcasting ? 'text-[#212121]' : 'text-[#ffffff]'}`}
-              >
-                {program.title}
-              </div>
-            </div>
-            <div className={`${shouldImageBeVisible ? 'opacity-100' : 'opacity-0'} w-full`}>
-              <img
-                ref={imageRef}
-                alt=""
-                className="pointer-events-none w-full rounded-[8px] border-[2px] border-solid border-[#FFFFFF1F]"
-                src={program.thumbnailUrl}
-              />
+      <button
+        className={`w-auto border-[1px] border-solid border-[#000000] ${isBroadcasting ? 'bg-[#FCF6E5]' : 'bg-[#212121]'} px-[12px] py-[8px] text-left ${isArchived ? 'opacity-50 hover:brightness-200' : 'opacity-100 hover:brightness-125'}`}
+        style={{ height: `${height}px`, width: `${width}px` }}
+        type="button"
+        onClick={onClick}
+      >
+        <div className="flex size-full flex-col overflow-hidden">
+          <div ref={titleRef} className="mb-[8px] flex flex-row items-start justify-start">
+            <span
+              className={`mr-[8px] shrink-0 grow-0 text-[14px] font-bold ${isBroadcasting ? 'text-[#767676]' : 'text-[#999999]'}`}
+            >
+              {DateTime.fromISO(program.startAt).toFormat('mm')}
+            </span>
+            <div
+              className={`grow-1 shrink-1 line-clamp-3 overflow-hidden text-ellipsis text-[14px] font-bold ${isBroadcasting ? 'text-[#212121]' : 'text-[#ffffff]'}`}
+            >
+              {program.title}
             </div>
           </div>
-        </button>
-      </Hoverable>
+          <div className={`${shouldImageBeVisible ? 'opacity-100' : 'opacity-0'} w-full`}>
+            <img
+              ref={imageRef}
+              alt=""
+              className="pointer-events-none w-full rounded-[8px] border-[2px] border-solid border-[#FFFFFF1F]"
+              src={program.thumbnailUrl}
+            />
+          </div>
+        </div>
+      </button>
       <ProgramDetailDialog isOpen={shouldProgramDetailDialogOpen} program={program} />
     </>
   );
