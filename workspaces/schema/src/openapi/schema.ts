@@ -110,7 +110,7 @@ export const getEpisodeByIdRequestParams = z.object({
   episodeId: z.string(),
 });
 export const getEpisodeByIdResponse = episode
-  .pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })
+  .pick({ id: true, title: true, description: true, thumbnailUrl: true, streamId: true, premium: true })
   .extend({
     series: series.pick({ title: true }).extend({
       episodes: z.array(episode.pick({ id: true, title: true, description: true, thumbnailUrl: true, premium: true })),
