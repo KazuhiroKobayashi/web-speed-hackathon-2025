@@ -38,6 +38,7 @@ export const createEpisodePageStoreSlice = () => {
     playerRef: (player: PlayerWrapper | null) => {
       function onMount(player: PlayerWrapper): void {
         const abortController = new AbortController();
+        let isUpdating = false;
 
         player.videoElement.addEventListener(
           'playing',
@@ -54,20 +55,47 @@ export const createEpisodePageStoreSlice = () => {
           { signal: abortController.signal },
         );
 
-        const interval = setInterval(function tick() {
-          set(() => ({
-            currentTime: player.currentTime,
-            duration: player.duration,
-          }));
-        }, 250);
+        const updatePlayerState = () => {
+          const { currentTime: prevTime, duration: prevDuration } = get();
+          const currentTime = player.currentTime;
+          const duration = player.duration;
+
+          if (currentTime !== prevTime || duration !== prevDuration) {
+            set({ currentTime, duration });
+          }
+
+          if (!abortController.signal.aborted) {
+            requestAnimationFrame(updatePlayerState);
+          }
+        };
+
+        requestAnimationFrame(updatePlayerState);
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (!!entries[0] && entries[0].isIntersecting) {
+              if (!isUpdating) {
+                isUpdating = true;
+                requestAnimationFrame(updatePlayerState);
+              }
+            } else {
+              isUpdating = false;
+            }
+          },
+          { threshold: 0.1 },
+        );
+
+        observer.observe(player.videoElement);
+
         abortController.signal.addEventListener('abort', () => {
-          clearInterval(interval);
+          observer.disconnect();
+          isUpdating = false;
         });
 
         set(() => ({
           abortController,
-          currentTime: 0,
-          duration: 0,
+          currentTime: player.currentTime || 0,
+          duration: player.duration || 0,
           muted: true,
           player,
           playing: false,
