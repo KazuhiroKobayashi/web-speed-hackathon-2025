@@ -174,6 +174,9 @@ export const getProgramByIdResponse = program
 export const getRecommendedModulesRequestParams = z.object({
   referenceId: z.string(),
 });
+export const getRecommendedModulesRequestQuery = z.object({
+  limit: z.string().optional().openapi({ format: 'int32' }),
+});
 export const getRecommendedModulesResponse = z.array(
   recommendedModule.pick({ id: true, type: true, title: true }).extend({
     items: z.array(

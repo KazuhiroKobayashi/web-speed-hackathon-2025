@@ -27,7 +27,7 @@ export const prefetch = async (store: ReturnType<typeof createStore>, { programI
     store.getState().features.program.fetchProgramById({ programId }),
     store.getState().features.channel.fetchChannels(),
     store.getState().features.timetable.fetchTimetable({ since, until }),
-    store.getState().features.recommended.fetchRecommendedModulesByReferenceId({ referenceId: programId }),
+    store.getState().features.recommended.fetchRecommendedModulesByReferenceId({ referenceId: programId, limit: 1 }),
   ]);
   return { channels, modules, program, timetable };
 };

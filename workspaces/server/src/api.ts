@@ -432,6 +432,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
     schema: {
       tags: ['レコメンド'],
       params: schema.getRecommendedModulesRequestParams,
+      querystring: schema.getRecommendedModulesRequestQuery,
       response: {
         200: {
           content: {
@@ -449,6 +450,7 @@ export async function registerApi(app: FastifyInstance): Promise<void> {
         where(module, { eq }) {
           return eq(module.referenceId, req.params.referenceId);
         },
+        limit: req.query.limit ? Number(req.query.limit) : undefined,
         orderBy(module, { asc }) {
           return asc(module.order);
         },

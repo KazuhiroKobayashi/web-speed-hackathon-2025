@@ -2,6 +2,7 @@ import { useStore } from '@wsh-2025/client/src/app/StoreContext';
 
 interface Params {
   referenceId: string;
+  limit?: number;
 }
 
 export function useRecommended({ referenceId }: Params) {

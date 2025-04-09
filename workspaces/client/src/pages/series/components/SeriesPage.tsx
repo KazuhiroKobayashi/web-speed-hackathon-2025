@@ -12,7 +12,7 @@ export const prefetch = async (store: ReturnType<typeof createStore>, { seriesId
   invariant(seriesId);
   const [series, modules] = await Promise.all([
     store.getState().features.series.fetchSeriesById({ seriesId }),
-    store.getState().features.recommended.fetchRecommendedModulesByReferenceId({ referenceId: seriesId }),
+    store.getState().features.recommended.fetchRecommendedModulesByReferenceId({ referenceId: seriesId, limit: 1 }),
   ]);
   return { modules, series };
 };

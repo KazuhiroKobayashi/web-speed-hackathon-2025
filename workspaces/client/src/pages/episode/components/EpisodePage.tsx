@@ -19,7 +19,7 @@ export const prefetch = async (store: ReturnType<typeof createStore>, { episodeI
   invariant(episodeId);
   const [episode, modules] = await Promise.all([
     store.getState().features.episode.fetchEpisodeById({ episodeId }),
-    store.getState().features.recommended.fetchRecommendedModulesByReferenceId({ referenceId: episodeId }),
+    store.getState().features.recommended.fetchRecommendedModulesByReferenceId({ referenceId: episodeId, limit: 1 }),
   ]);
   return { episode, modules };
 };
