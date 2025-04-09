@@ -52,42 +52,39 @@ export const ProgramPage = () => {
   const navigate = useNavigate();
   const isArchivedRef = useRef(DateTime.fromISO(program.endAt) <= DateTime.now());
   const isBroadcastStarted = DateTime.fromISO(program.startAt) <= DateTime.now();
+
   useEffect(() => {
     if (isArchivedRef.current) {
       return;
     }
 
-    // 放送前であれば、放送開始時に画面を更新する
+    let timeout: NodeJS.Timeout | undefined = undefined;
+    const now = DateTime.now().toMillis();
     if (!isBroadcastStarted) {
-      const now = DateTime.now().toMillis();
+      // 放送前である場合は、放送開始時に画面を更新する
       const startAt = DateTime.fromISO(program.startAt).toMillis();
       const delay = Math.max(startAt - now, 0);
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         forceUpdate();
       }, delay);
-      return () => {
-        clearTimeout(timeout);
-      };
+    } else {
+      // 放送中である場合は、放送終了時に次の番組に遷移する
+      // 次の番組がない場合は、画面を更新して終了する
+      const endAt = DateTime.fromISO(program.endAt).toMillis();
+      const delay = Math.max(endAt - now, 0);
+      timeout = setTimeout(() => {
+        if (nextProgram?.id) {
+          void navigate(`/programs/${nextProgram.id}`, {
+            preventScrollReset: true,
+            replace: true,
+            state: { loading: 'none' },
+          });
+        } else {
+          isArchivedRef.current = true;
+          forceUpdate();
+        }
+      }, delay);
     }
-
-    // 放送中に次の番組が始まったら、画面をそのままにしつつ、情報を次の番組にする
-    let timeout = setTimeout(function tick() {
-      if (DateTime.now() < DateTime.fromISO(program.endAt)) {
-        timeout = setTimeout(tick, 250);
-        return;
-      }
-
-      if (nextProgram?.id) {
-        void navigate(`/programs/${nextProgram.id}`, {
-          preventScrollReset: true,
-          replace: true,
-          state: { loading: 'none' },
-        });
-      } else {
-        isArchivedRef.current = true;
-        forceUpdate();
-      }
-    }, 250);
     return () => {
       clearTimeout(timeout);
     };
