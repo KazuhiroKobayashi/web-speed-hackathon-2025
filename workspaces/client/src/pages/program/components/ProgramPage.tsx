@@ -57,12 +57,14 @@ export const ProgramPage = () => {
       return;
     }
 
-    // 放送前であれば、放送開始になるまで画面を更新し続ける
+    // 放送前であれば、放送開始時に画面を更新する
     if (!isBroadcastStarted) {
-      let timeout = setTimeout(function tick() {
+      const now = DateTime.now().toMillis();
+      const startAt = DateTime.fromISO(program.startAt).toMillis();
+      const delay = Math.max(startAt - now, 0);
+      const timeout = setTimeout(() => {
         forceUpdate();
-        timeout = setTimeout(tick, 250);
-      }, 250);
+      }, delay);
       return () => {
         clearTimeout(timeout);
       };
