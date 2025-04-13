@@ -71,14 +71,13 @@ export const Program = ({ height, program }: Props): ReactElement => {
   }, [status]);
 
   const titleRef = useRef<HTMLDivElement | null>(null);
-  const imageRef = useRef<HTMLImageElement | null>(null);
 
   const [shouldImageBeVisible, setShouldImageBeVisible] = useState<boolean>(false);
   useEffect(() => {
-    if (imageRef.current === null || titleRef.current === null) {
+    if (titleRef.current === null) {
       return;
     }
-    const imageHeight = imageRef.current.clientHeight;
+    const imageHeight = width * 9 / 16;
     const titleHeight = titleRef.current.clientHeight;
     const hasSpaceForImage = imageHeight <= height - titleHeight;
     if (hasSpaceForImage !== shouldImageBeVisible) {
@@ -107,14 +106,15 @@ export const Program = ({ height, program }: Props): ReactElement => {
               {program.title}
             </div>
           </div>
-          <div className={`${shouldImageBeVisible ? 'opacity-100' : 'opacity-0'} w-full`}>
-            <img
-              ref={imageRef}
-              alt=""
-              className="pointer-events-none w-full rounded-[8px] border-[2px] border-solid border-[#FFFFFF1F]"
-              src={program.thumbnailUrl}
-            />
-          </div>
+          {shouldImageBeVisible && (
+            <div className="w-full">
+              <img
+                alt=""
+                className="pointer-events-none w-full rounded-[8px] border-[2px] border-solid border-[#FFFFFF1F]"
+                src={program.thumbnailUrl}
+              />
+            </div>
+          )}
         </div>
       </button>
       <ProgramDetailDialog isOpen={shouldProgramDetailDialogOpen} program={program} />
