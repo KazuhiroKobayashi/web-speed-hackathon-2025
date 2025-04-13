@@ -65,7 +65,7 @@ const config = {
         use: [rspack.CssExtractRspackPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.png$/,
+        test: /\.avif$/,
         type: 'asset/resource',
       },
       {

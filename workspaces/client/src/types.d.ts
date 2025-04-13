@@ -1,4 +1,4 @@
-declare module '*.png' {
+declare module '*.avif' {
   const value: string;
   export = value;
 }
