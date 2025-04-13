@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 const $fetch = createFetch({
   baseURL: process.env['API_BASE_URL'] ?? '/api',
@@ -22,14 +22,10 @@ const $fetch = createFetch({
 });
 
 interface AuthService {
-  fetchSignIn: (
-    body: StandardSchemaV1.InferOutput<typeof schema.signInRequestBody>,
-  ) => Promise<StandardSchemaV1.InferOutput<typeof schema.signInResponse>>;
+  fetchSignIn: (body: z.infer<typeof schema.signInRequestBody>) => Promise<z.infer<typeof schema.signInResponse>>;
   fetchSignOut: () => Promise<void>;
-  fetchSignUp: (
-    body: StandardSchemaV1.InferOutput<typeof schema.signUpRequestBody>,
-  ) => Promise<StandardSchemaV1.InferOutput<typeof schema.signUpResponse>>;
-  fetchUser: () => Promise<StandardSchemaV1.InferOutput<typeof schema.getUserResponse>>;
+  fetchSignUp: (body: z.infer<typeof schema.signUpRequestBody>) => Promise<z.infer<typeof schema.signUpResponse>>;
+  fetchUser: () => Promise<z.infer<typeof schema.getUserResponse>>;
 }
 
 export const authService: AuthService = {

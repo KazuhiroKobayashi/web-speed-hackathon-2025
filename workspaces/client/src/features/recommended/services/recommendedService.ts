@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 const $fetch = createFetch({
   baseURL: process.env['API_BASE_URL'] ?? '/api',
@@ -18,7 +18,7 @@ interface RecommendedService {
   fetchRecommendedModulesByReferenceId: (params: {
     referenceId: string;
     limit: number | undefined;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getRecommendedModulesResponse>>;
+  }) => Promise<z.infer<typeof schema.getRecommendedModulesResponse>>;
 }
 
 export const recommendedService: RecommendedService = {

@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 const $fetch = createFetch({
   baseURL: process.env['API_BASE_URL'] ?? '/api',
@@ -15,8 +15,8 @@ const $fetch = createFetch({
 
 interface TimetableService {
   fetchTimetable: (
-    params: StandardSchemaV1.InferOutput<typeof schema.getTimetableRequestQuery>,
-  ) => Promise<StandardSchemaV1.InferOutput<typeof schema.getTimetableResponse>>;
+    params: z.infer<typeof schema.getTimetableRequestQuery>,
+  ) => Promise<z.infer<typeof schema.getTimetableResponse>>;
 }
 
 export const timetableService: TimetableService = {

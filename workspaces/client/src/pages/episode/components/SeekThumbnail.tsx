@@ -1,13 +1,13 @@
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
 import { useEffect, useRef, useState } from 'react';
+import { z } from 'zod';
 
 import { useDuration } from '@wsh-2025/client/src/pages/episode/hooks/useDuration';
 
 const SEEK_THUMBNAIL_WIDTH = 160;
 
 interface Props {
-  episode: StandardSchemaV1.InferOutput<typeof schema.getEpisodeByIdResponse>;
+  episode: z.infer<typeof schema.getEpisodeByIdResponse>;
 }
 
 export const SeekThumbnail = ({ episode }: Props) => {

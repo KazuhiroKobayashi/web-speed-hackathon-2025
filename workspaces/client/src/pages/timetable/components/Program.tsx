@@ -1,8 +1,7 @@
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
 import { DateTime } from 'luxon';
 import { ReactElement, useEffect, useRef, useState } from 'react';
-import { ArrayValues } from 'type-fest';
+import { z } from 'zod';
 
 import { ProgramDetailDialog } from '@wsh-2025/client/src/pages/timetable/components/ProgramDetailDialog';
 import { useColumnWidth } from '@wsh-2025/client/src/pages/timetable/hooks/useColumnWidth';
@@ -10,7 +9,7 @@ import { useSelectedProgramId } from '@wsh-2025/client/src/pages/timetable/hooks
 
 interface Props {
   height: number;
-  program: ArrayValues<StandardSchemaV1.InferOutput<typeof schema.getTimetableResponse>>;
+  program: z.infer<typeof schema.getTimetableResponse>[number];
 }
 
 type Status = 'broadcasting' | 'archived' | 'notStarted';

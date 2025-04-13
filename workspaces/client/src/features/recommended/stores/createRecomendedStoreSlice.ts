@@ -1,8 +1,6 @@
 import { lens } from '@dhmk/zustand-lens';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { produce } from 'immer';
-import { ArrayValues } from 'type-fest';
+import { z } from 'zod';
 
 import { recommendedService } from '@wsh-2025/client/src/features/recommended/services/recommendedService';
 
@@ -10,10 +8,7 @@ type ReferenceId = string;
 type RecommendedModuleId = string;
 
 interface RecommendedState {
-  recommendedModules: Record<
-    RecommendedModuleId,
-    ArrayValues<StandardSchemaV1.InferOutput<typeof schema.getRecommendedModulesResponse>>
-  >;
+  recommendedModules: Record<RecommendedModuleId, z.infer<typeof schema.getRecommendedModulesResponse>[number]>;
   references: Record<ReferenceId, RecommendedModuleId[]>;
 }
 
@@ -21,7 +16,7 @@ interface RecommendedActions {
   fetchRecommendedModulesByReferenceId: (params: {
     referenceId: ReferenceId;
     limit?: number;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getRecommendedModulesResponse>>;
+  }) => Promise<z.infer<typeof schema.getRecommendedModulesResponse>>;
 }
 
 export const createRecommendedStoreSlice = () => {
@@ -29,12 +24,21 @@ export const createRecommendedStoreSlice = () => {
     fetchRecommendedModulesByReferenceId: async ({ referenceId, limit }) => {
       const modules = await recommendedService.fetchRecommendedModulesByReferenceId({ referenceId, limit });
       set((state) => {
-        return produce(state, (draft) => {
-          draft.references[referenceId] = modules.map((module) => module.id);
-          for (const module of modules) {
-            draft.recommendedModules[module.id] = module;
-          }
-        });
+        const updatedModules = modules.reduce(
+          (acc, module) => {
+            acc[module.id] = module;
+            return acc;
+          },
+          { ...state.recommendedModules },
+        );
+        return {
+          ...state,
+          recommendedModules: updatedModules,
+          references: {
+            ...state.references,
+            [referenceId]: modules.map((module) => module.id),
+          },
+        };
       });
       return modules;
     },

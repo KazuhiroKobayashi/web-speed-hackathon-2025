@@ -1,14 +1,13 @@
 import { ElementScrollRestoration } from '@epic-web/restore-scroll';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { ArrayValues } from 'type-fest';
+import { z } from 'zod';
 
 import { EpisodeItem } from '@wsh-2025/client/src/features/recommended/components/EpisodeItem';
 import { SeriesItem } from '@wsh-2025/client/src/features/recommended/components/SeriesItem';
 import { useCarouselItemWidth } from '@wsh-2025/client/src/features/recommended/hooks/useCarouselItemWidth';
 
 interface Props {
-  module: ArrayValues<StandardSchemaV1.InferOutput<typeof schema.getRecommendedModulesResponse>>;
+  module: z.infer<typeof schema.getRecommendedModulesResponse>[number];
 }
 
 export const CarouselSection = ({ module }: Props) => {

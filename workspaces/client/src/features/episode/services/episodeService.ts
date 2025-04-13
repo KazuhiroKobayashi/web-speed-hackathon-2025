@@ -1,6 +1,6 @@
 import { createFetch, createSchema } from '@better-fetch/fetch';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
+import { z } from 'zod';
 
 const $fetch = createFetch({
   baseURL: process.env['API_BASE_URL'] ?? '/api',
@@ -17,10 +17,8 @@ const $fetch = createFetch({
 });
 
 interface EpisodeService {
-  fetchEpisodeById: (params: {
-    episodeId: string;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getEpisodeByIdResponse>>;
-  fetchEpisodes: () => Promise<StandardSchemaV1.InferOutput<typeof schema.getEpisodesResponse>>;
+  fetchEpisodeById: (params: { episodeId: string }) => Promise<z.infer<typeof schema.getEpisodeByIdResponse>>;
+  fetchEpisodes: () => Promise<z.infer<typeof schema.getEpisodesResponse>>;
 }
 
 export const episodeService: EpisodeService = {

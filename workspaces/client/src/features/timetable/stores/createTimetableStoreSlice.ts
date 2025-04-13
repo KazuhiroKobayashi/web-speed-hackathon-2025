@@ -1,22 +1,17 @@
 import { lens } from '@dhmk/zustand-lens';
-import { StandardSchemaV1 } from '@standard-schema/spec';
 import * as schema from '@wsh-2025/schema/src/api/schema';
-import { produce } from 'immer';
-import { ArrayValues } from 'type-fest';
+import { z } from 'zod';
 
 import { timetableService } from '@wsh-2025/client/src/features/timetable/services/timetableService';
 
 type ProgramId = string;
 
 interface TimetableState {
-  programs: Record<ProgramId, ArrayValues<StandardSchemaV1.InferOutput<typeof schema.getTimetableResponse>>>;
+  programs: Record<ProgramId, z.infer<typeof schema.getTimetableResponse>[number]>;
 }
 
 interface TimetableActions {
-  fetchTimetable: (params: {
-    since: string;
-    until: string;
-  }) => Promise<StandardSchemaV1.InferOutput<typeof schema.getTimetableResponse>>;
+  fetchTimetable: (params: { since: string; until: string }) => Promise<z.infer<typeof schema.getTimetableResponse>>;
 }
 
 export const createTimetableStoreSlice = () => {
@@ -24,12 +19,17 @@ export const createTimetableStoreSlice = () => {
     fetchTimetable: async ({ since, until }) => {
       const programs = await timetableService.fetchTimetable({ since, until });
       set((state) => {
-        return produce(state, (draft) => {
-          draft.programs = {};
-          for (const program of programs) {
-            draft.programs[program.id] = program;
-          }
-        });
+        const updatedPrograms = programs.reduce(
+          (acc, program) => {
+            acc[program.id] = program;
+            return acc;
+          },
+          { ...state.programs },
+        );
+        return {
+          ...state,
+          programs: updatedPrograms,
+        };
       });
       return programs;
     },
