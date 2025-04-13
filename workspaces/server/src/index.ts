@@ -1,5 +1,6 @@
 import '@wsh-2025/server/src/setups/luxon';
 
+import compress from '@fastify/compress';
 import cors from '@fastify/cors';
 import fastify from 'fastify';
 
@@ -15,6 +16,10 @@ async function main() {
 
   app.register(cors, {
     origin: true,
+  });
+  app.register(compress, {
+    encodings: ['gzip', 'deflate', 'br'],
+    global: true,
   });
   app.register(registerApi, { prefix: '/api' });
   app.register(registerStreams);

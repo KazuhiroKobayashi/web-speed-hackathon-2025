@@ -17,11 +17,11 @@ export function registerSsr(app: FastifyInstance): void {
   });
 
   app.get('/favicon.ico', (_, reply) => {
-    reply.status(404).send();
+    return reply.status(404).send();
   });
 
   app.get('/*', async (_, reply) => {
-    reply.type('text/html').send(/* html */ `
+    return reply.type('text/html').send(/* html */ `
       <!DOCTYPE html>
       <html lang="ja">
         <head>
