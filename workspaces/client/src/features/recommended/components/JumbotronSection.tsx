@@ -38,7 +38,7 @@ export const JumbotronSection = ({ module }: Props) => {
             </div>
 
             <Flipped stagger flipId={isTransitioning ? `episode-${episode.id}` : 0}>
-              <div className="h-full w-auto shrink-0 grow-0">
+              <div className="aspect-video h-full shrink-0 grow-0">
                 <Player
                   loop
                   className="size-full"
