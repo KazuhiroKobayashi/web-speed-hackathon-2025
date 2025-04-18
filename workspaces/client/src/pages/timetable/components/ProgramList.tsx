@@ -10,9 +10,10 @@ import { Program } from '@wsh-2025/client/src/pages/timetable/components/Program
 interface Props {
   channelId: string;
   programList: z.infer<typeof schema.getTimetableResponse>;
+  setProgram: (program: z.infer<typeof schema.getTimetableResponse>[number] | null) => void;
 }
 
-export const ProgramList = ({ channelId, programList }: Props): ReactElement => {
+export const ProgramList = ({ channelId, programList, setProgram }: Props): ReactElement => {
   return (
     <div className="relative">
       <div className="flex flex-col">
@@ -23,7 +24,12 @@ export const ProgramList = ({ channelId, programList }: Props): ReactElement => 
           const height = HEIGHT_ONE_HOUR * (duration / 60);
 
           return (
-            <div key={program.id} className="shrink-0 grow-0">
+            <div
+              key={program.id}
+              onClick={() => setProgram(program)}
+              role="button"
+              className="shrink-0 grow-0 cursor-pointer"
+            >
               <Program height={height} program={program} />
             </div>
           );

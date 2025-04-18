@@ -3,9 +3,7 @@ import { DateTime } from 'luxon';
 import { ReactElement, useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
 
-import { ProgramDetailDialog } from '@wsh-2025/client/src/pages/timetable/components/ProgramDetailDialog';
 import { useColumnWidth } from '@wsh-2025/client/src/pages/timetable/hooks/useColumnWidth';
-import { useSelectedProgramId } from '@wsh-2025/client/src/pages/timetable/hooks/useSelectedProgramId';
 
 interface Props {
   height: number;
@@ -43,12 +41,6 @@ const getDelay = (startAt: string, endAt: string): number => {
 export const Program = ({ height, program }: Props): ReactElement => {
   const width = useColumnWidth(program.channelId);
 
-  const [selectedProgramId, setProgram] = useSelectedProgramId();
-  const shouldProgramDetailDialogOpen = program.id === selectedProgramId;
-  const onClick = () => {
-    setProgram(program);
-  };
-
   const [status, setStatus] = useState<Status>(getStatus(program.startAt, program.endAt));
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
@@ -77,7 +69,7 @@ export const Program = ({ height, program }: Props): ReactElement => {
     if (titleRef.current === null) {
       return;
     }
-    const imageHeight = width * 9 / 16;
+    const imageHeight = (width * 9) / 16;
     const titleHeight = titleRef.current.clientHeight;
     const hasSpaceForImage = imageHeight <= height - titleHeight;
     if (hasSpaceForImage !== shouldImageBeVisible) {
@@ -87,11 +79,9 @@ export const Program = ({ height, program }: Props): ReactElement => {
 
   return (
     <>
-      <button
+      <div
         className={`w-auto border-[1px] border-solid border-[#000000] ${status === 'broadcasting' ? 'bg-[#FCF6E5]' : 'bg-[#212121]'} px-[12px] py-[8px] text-left ${status === 'archived' ? 'opacity-50 hover:brightness-200' : 'opacity-100 hover:brightness-125'}`}
         style={{ height: `${height}px`, width: `${width}px` }}
-        type="button"
-        onClick={onClick}
       >
         <div className="flex size-full flex-col overflow-hidden">
           <div ref={titleRef} className="mb-[8px] flex flex-row items-start justify-start">
@@ -116,8 +106,7 @@ export const Program = ({ height, program }: Props): ReactElement => {
             </div>
           )}
         </div>
-      </button>
-      <ProgramDetailDialog isOpen={shouldProgramDetailDialogOpen} program={program} />
+      </div>
     </>
   );
 };

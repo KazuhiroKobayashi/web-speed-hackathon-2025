@@ -9,7 +9,7 @@ type Program = z.infer<typeof schema.getTimetableResponse>[number];
 
 interface TimetablePageState {
   columnWidthRecord: Record<ChannelId, number>;
-  selectedProgramId: string | null;
+  selectedProgram: Program | null;
   shownNewFeatureDialog: boolean;
 }
 
@@ -39,10 +39,10 @@ export const createTimetablePageStoreSlice = () => {
       }));
     },
     columnWidthRecord: {},
-    selectedProgramId: null,
+    selectedProgram: null,
     selectProgram: (program: Program | null) => {
       set(() => ({
-        selectedProgramId: program?.id ?? null,
+        selectedProgram: program ?? null,
       }));
     },
     shownNewFeatureDialog: true,

@@ -8,6 +8,8 @@ import { NewTimetableFeatureDialog } from '@wsh-2025/client/src/pages/timetable/
 import { ProgramList } from '@wsh-2025/client/src/pages/timetable/components/ProgramList';
 import { TimelineYAxis } from '@wsh-2025/client/src/pages/timetable/components/TimelineYAxis';
 import { useShownNewFeatureDialog } from '@wsh-2025/client/src/pages/timetable/hooks/useShownNewFeatureDialog';
+import { useSelectedProgram } from '@wsh-2025/client/src/pages/timetable/hooks/useSelectedProgram';
+import { ProgramDetailDialog } from '@wsh-2025/client/src/pages/timetable/components/ProgramDetailDialog';
 
 export const prefetch = async (store: ReturnType<typeof createStore>) => {
   const now = DateTime.now();
@@ -24,9 +26,14 @@ export const prefetch = async (store: ReturnType<typeof createStore>) => {
 export const TimetablePage = () => {
   const record = useTimetable();
   const shownNewFeatureDialog = useShownNewFeatureDialog();
+  const [selectedProgram, setProgram] = useSelectedProgram();
 
   const channelIds = Object.keys(record);
   const programLists = Object.values(record);
+
+  const handleClose = () => {
+    setProgram(null);
+  };
 
   return (
     <>
@@ -50,7 +57,7 @@ export const TimetablePage = () => {
             invariant(channelId);
             return (
               <div key={channelIds[index]} className="shrink-0 grow-0">
-                <ProgramList channelId={channelId} programList={programList} />
+                <ProgramList channelId={channelId} programList={programList} setProgram={setProgram} />
               </div>
             );
           })}
@@ -58,6 +65,7 @@ export const TimetablePage = () => {
       </div>
 
       <NewTimetableFeatureDialog isOpen={shownNewFeatureDialog} />
+      {selectedProgram && <ProgramDetailDialog isOpen={true} program={selectedProgram} onClose={handleClose} />}
     </>
   );
 };

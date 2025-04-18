@@ -5,20 +5,15 @@ import { z } from 'zod';
 
 import { Dialog } from '@wsh-2025/client/src/features/dialog/components/Dialog';
 import { useEpisode } from '@wsh-2025/client/src/pages/timetable/hooks/useEpisode';
-import { useSelectedProgramId } from '@wsh-2025/client/src/pages/timetable/hooks/useSelectedProgramId';
 
 interface Props {
   isOpen: boolean;
   program: z.infer<typeof schema.getTimetableResponse>[number];
+  onClose: () => void;
 }
 
-export const ProgramDetailDialog = ({ isOpen, program }: Props): ReactElement => {
+export const ProgramDetailDialog = ({ isOpen, program, onClose }: Props): ReactElement => {
   const episode = useEpisode(program.episodeId);
-  const [, setProgram] = useSelectedProgramId();
-
-  const onClose = () => {
-    setProgram(null);
-  };
 
   return (
     <Dialog isOpen={isOpen} onClose={onClose}>
@@ -33,6 +28,7 @@ export const ProgramDetailDialog = ({ isOpen, program }: Props): ReactElement =>
           alt=""
           className="mb-[24px] aspect-video w-full rounded-[8px] border-[2px] border-solid border-[#FFFFFF1F]"
           src={program.thumbnailUrl}
+          loading="eager"
         />
 
         {episode != null ? (
@@ -47,6 +43,7 @@ export const ProgramDetailDialog = ({ isOpen, program }: Props): ReactElement =>
               alt=""
               className="mb-[24px] aspect-video w-full rounded-[8px] border-[2px] border-solid border-[#FFFFFF1F]"
               src={episode.thumbnailUrl}
+              loading="eager"
             />
           </>
         ) : null}
