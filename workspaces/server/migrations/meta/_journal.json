@@ -43,6 +43,13 @@
       "when": 1744525505090,
       "tag": "0005_spicy_black_bird",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1745720378844,
+      "tag": "0006_flaky_gunslinger",
+      "breakpoints": true
     }
   ]
 }
